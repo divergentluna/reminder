@@ -3,28 +3,29 @@ from tkinter.messagebox import showinfo
 
 
 class Task:
-    def __init__(self,description,link,loc,year,month,day,hour,minute):
+    def __init__(self, description, link, loc, year, month, day, hour, minute):
         self.description = description
         self.link = link
         self.loc = loc
-        self.year= year
-        self.month= month
+        self.year = year
+        self.month = month
         self.day = day
         self.hour = hour
         self.minute = minute
         # self.priority = priority
 
     def remind(self):
-            if self.year == datetime.now().year \
-                    and self.month == datetime.now().month \
-                    and self.day == datetime.now().day \
-                    and self.hour == datetime.now().hour \
-                    and self.minute == datetime.now().minute:
-                return True
-            return False
+        if self.year == datetime.now().year \
+                and self.month == datetime.now().month \
+                and self.day == datetime.now().day \
+                and self.hour == datetime.now().hour \
+                and self.minute == datetime.now().minute:
+            return True
+        return False
+
 
 class Check:
-    def __init__(self,year,month,day,hour,minute):
+    def __init__(self, year, month, day, hour, minute):
         self.year = year
         self.month = month
         self.day = day
@@ -35,8 +36,9 @@ class Check:
         if self.year == 0 \
                 or self.month == 0 \
                 or self.day == 0:
-            showinfo("notification", "Enter date and time!!")
+            showinfo("notification", "Enter date!")
             return False
+        # CHECK DAY OF MONTH
         elif self.year == datetime.now().year:
             if self.month < datetime.now().month:
                 showinfo("notification", "month pass")
