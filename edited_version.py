@@ -6,10 +6,15 @@ from tkinter import *
 from tkinter.messagebox import showinfo
 from tkinter.ttk import *
 
+import logging
+
+logging.basicConfig(filename='logs.log', level=logging.INFO)
+logging.info(f'This program opened in {datetime.now()}')
+
+
 
 def new():
     exit()
-
     # from openpyxl import *
     # def save():
     #     a = link.get()
@@ -38,6 +43,7 @@ def new():
 
         f = open('1.txt', 'w')
         f.write('{}\n{}\n{}\n{}\\{}\\{}\n{}:{}'.format(des, li, loc, str(y), str(m), str(d), str(h), str(min)))
+        logging.info(f'new alarm with description: {des} \nsaved in txt')
 
     def check():
         if year.get() == 0 \
@@ -126,6 +132,7 @@ def new():
 
 
 def exit():
+    logging.info(f'Program Ended in {datetime.now()}')
     t.destroy()
 
 
@@ -176,7 +183,6 @@ def edit():
     txt_edit.grid(row=0, column=1, sticky="nsew")
 
     window.mainloop()
-
 
 
 t = Tk()

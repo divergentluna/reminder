@@ -28,7 +28,7 @@ def remind():
             and day.get() == datetime.now().day \
             and hour_user.get() == datetime.now().hour \
             and minute_user.get() == datetime.now().minute:
-        # playsound("ring.mp3")
+        playsound("ring.mp3")
         screen = Tk()
         Label(screen, text="Description :").grid(row=0, column=0, pady=10)
         Label(screen, text=descrip.get(1.0, END)).grid(row=0, column=1)
