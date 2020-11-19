@@ -1,14 +1,17 @@
 from tkinter import ttk
 
 from playsound import *
-from datetime import datetime
+
 from tkinter import *
 
 from tkinter.ttk import *
 from task import *
 
+
+# AFTER PUSHING NEW BUTTON
 def new():
     exit()
+
     def main():
         li = link.get()
         loc = location.get()
@@ -30,21 +33,29 @@ def new():
             f.write('{}\n{}\n{}\n{}\\{}\\{}\n{}:{}'.format(des, li, loc, str(y), str(m), str(d), str(h), str(min)))
             f.close()
             showinfo("notification", "reminder has been set")
-            obj_task = Task(des, li, loc, y, m, d, h, min)
-            flag = True
-            while flag == True:
-                if obj_task.remind():
-                    screen = Tk()
-                    Label(screen, text="Description :").grid(row=0, column=0, pady=10)
-                    Label(screen, text=des).grid(row=0, column=1)
-                    Label(screen, text="Link :").grid(row=1, column=0, pady=10)
-                    Label(screen, text=li).grid(row=1, column=1)
-                    Label(screen, text="location :").grid(row=2, column=0, pady=10)
-                    Label(screen, text=loc).grid(row=2, column=1)
-                    playsound("ring.mp3")
-                    flag = False
-                    screen.mainloop()
+            obj_task = Task(des, li, loc, y, m, d, h, min, priority)
 
+            flag = True
+            # RING AND SHOW THE DETAILS THAT WAS SET
+            while flag:
+                if priority == 'normal':
+                    if obj_task.remind():
+                        screen = Tk()
+                        Label(screen, text="Description :").grid(row=0, column=0, pady=10)
+                        Label(screen, text=des).grid(row=0, column=1)
+                        Label(screen, text="Link :").grid(row=1, column=0, pady=10)
+                        Label(screen, text=li).grid(row=1, column=1)
+                        Label(screen, text="location :").grid(row=2, column=0, pady=10)
+                        Label(screen, text=loc).grid(row=2, column=1)
+                        playsound("ring.mp3")
+                        flag = False
+                        screen.mainloop()
+                else:
+                    # ADD CONDITION FOR IMPORTANT
+                    now_plus_5 = datetime.now() + timedelta(minutes=5)
+                    flag = False
+
+    # OPEN REMINDER WINDOW
     t = Tk()
     t.geometry("600x350")
     t.title("REMINDER")
@@ -53,7 +64,7 @@ def new():
     file_name.grid(row=0, column=1, pady=10)
     Label(t, text="Description :").grid(row=1, column=0, pady=10)
 
-    descrip = Text(t, width=50, height=2, font=(("Arial"), 10), wrap=WORD)
+    descrip = Text(t, width=50, height=2, font=("Arial", 10), wrap=WORD)
     descrip.grid(row=1, column=1, columnspan=3, sticky=W)
 
     Label(t, text="Link :").grid(row=2, column=0, pady=10)
@@ -95,15 +106,18 @@ def new():
     category = ttk.Combobox(t, values=['maktab', 'uni', 'home'])
     category.grid(row=7, column=1)
 
-    set_button = Button(t, text="set", command=main).grid(row=8, column=3, pady=20, sticky=W)
-    set_button = Button(t, text="subtask").grid(row=8, column=2, pady=20, sticky=E)
+    Button(t, text="set", command=main).grid(row=8, column=3, pady=20, sticky=W)
+    Button(t, text="subtask").grid(row=8, column=2, pady=20, sticky=E)
 
     t.mainloop()
 
 
+# CLOSE MENU WINDOW
 def exit():
     t.destroy()
 
+
+# OPEN EDIT WINDOW AFTER PRESSING EDIT BUTTON
 def edit():
     import tkinter as tk
     from tkinter.filedialog import askopenfilename, asksaveasfilename
@@ -153,6 +167,7 @@ def edit():
     window.mainloop()
 
 
+# OPENING MENU WINDOW
 t = Tk()
 t.geometry("300x300")
 t.title("Menu")
