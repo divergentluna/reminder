@@ -6,6 +6,10 @@ from tkinter.ttk import Combobox
 import re
 import csv
 
+from playsound import playsound
+
+import logging
+
 
 class Task:
     def __init__(self, name, sub, cat, description, link, loc, year, month, day, hour, minute):
@@ -23,8 +27,12 @@ class Task:
         self.sub = sub
 
     def __str__(self):
-        def snoze():
-            pass
+        def snooze():
+            screen.destroy()
+            time.sleep(60)
+            playsound("ring.mp3")
+            logging.info(f'Reminder snoozed for 1 minute from {datetime.now()}')
+            return self
 
         def exit_s():
             screen.destroy()
@@ -40,7 +48,7 @@ class Task:
         Label(screen, text=self.loc).grid(row=2, column=1)
         Label(screen, text="Subtask :").grid(row=3, column=0, pady=10)
         Label(screen, text=self.sub).grid(row=3, column=1)
-        Button(screen, text="Snoze", command=snoze, width=15, bg="grey").grid(row=4, column=1, pady=20)
+        Button(screen, text="Snoze", command=snooze, width=15, bg="grey").grid(row=4, column=1, pady=20)
         Button(screen, text="Exit", command=exit_s, width=15, bg="grey").grid(row=4, column=0, pady=20)
         screen.mainloop()
         return "remind"
@@ -51,11 +59,13 @@ class Task:
                 or self.month == 0 \
                 or self.day == 0:
             showinfo("notification", "Enter date!")
+            logging.warning('No date has been entered.')
             return False
         # CHECK DAY OF MONTH
         elif self.month == 2:
             if self.day > 29:
                 showinfo("notification", "day is out of range for the month you choose")
+                logging.warning('Date out of range.')
                 return False
             else:
                 return True
@@ -65,6 +75,7 @@ class Task:
                 or self.month == 11:
             if self.day > 30:
                 showinfo("notification", "day is out of range for the month you choose")
+                logging.warning('Date/time out of range.')
                 return False
             else:
                 return True
@@ -72,23 +83,28 @@ class Task:
         elif self.year == datetime.now().year:
             if self.month < datetime.now().month:
                 showinfo("notification", "month pass")
+                logging.warning('Date/time out of range.')
                 return False
             elif self.month == datetime.now().month:
                 if self.day < datetime.now().day:
                     showinfo("notification", "day pass")
+                    logging.warning('Date/time out of range.')
                     return False
                 elif self.day == datetime.now().day:
                     if self.hour < datetime.now().hour:
                         showinfo("notification", "hour pass")
+                        logging.warning('Date/time out of range.')
                         return False
                     elif self.hour == datetime.now().hour:
                         if self.minute < datetime.now().minute:
                             showinfo("notification", "minute pass")
+                            logging.warning('Date/time out of range.')
                             return False
                         else:
                             return True
         # CHECK COMING YEARS
         else:
+            logging.info('Correct data has been entered')
             return True
 
         # CHECK IF URL IS IN CORRECT FORM
@@ -96,6 +112,7 @@ class Task:
             return True
         else:
             showinfo("notification", "URL is not correct!")
+            logging.warning('Incorrect link entered.')
             return False
 
     # COMPARE INPUT DATE AND TIME WITH SYSTEM DATE AND TIME FOR REMINDING
@@ -185,8 +202,12 @@ class Task:
                           'Hour', 'Minute']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
+
             writer.writerow({'Name': self.name, 'Description': self.description,
                              'Link': self.link, 'Location': self.loc,
+                             'Category': self.cat, 'SubTask': self.sub,
                              'Year': self.year, 'Month': self.month, 'Day': self.day,
                              'Hour': self.hour, 'Minute': self.minute})
             showinfo("notification", "reminder has been set")
+            logging.info(
+                f'New reminder set at {datetime.now()} for {self.year}/{self.month}/{self.day} at {self.hour}:{self.minute}')

@@ -7,8 +7,13 @@ from tkinter import *
 from tkinter.ttk import *
 from task import *
 
+import logging
+
+logging.basicConfig(filename='reminder_log.log', level=logging.INFO)
+
 
 def new():
+    logging.info(f'Programme closed at {datetime.now()}')
     t.destroy()
 
     def edit():
@@ -60,7 +65,7 @@ def new():
     file_name.grid(row=0, column=1, pady=10)
     Label(t2, text="Description :").grid(row=1, column=0, pady=10)
 
-    descrip = Text(t2, width=50, height=2, font=(("Arial"), 10), wrap=WORD)
+    descrip = Text(t2, width=50, height=2, font=("Arial", 10), wrap=WORD)
     descrip.grid(row=1, column=1, columnspan=3, sticky=W)
 
     Label(t2, text="Link :").grid(row=2, column=0, pady=10)
