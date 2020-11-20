@@ -19,12 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bef33074-5a97-4dca-807e-77f5d5065dd8" name="Default Changelist" comment="add menu window">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/reminder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/reminder.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="bef33074-5a97-4dca-807e-77f5d5065dd8" name="Default Changelist" comment="task class" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +65,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.first_window">
+  <component name="RunManager" selected="Python.main">
     <configuration name="first_window" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="reminder" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -137,10 +132,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.first_window" />
+        <item itemvalue="Python.task" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.task" />
-        <item itemvalue="Python.task" />
+        <item itemvalue="Python.first_window" />
+        <item itemvalue="Python.first_window" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
