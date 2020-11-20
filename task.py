@@ -12,7 +12,7 @@ import logging
 
 
 class Task:
-    def __init__(self, name, sub, cat, description, link, loc, year, month, day, hour, minute):
+    def __init__(self, name, sub, cat, description, link, loc, year, month, day, hour, minute, priority):
         self.description = description
         self.link = link
         self.loc = loc
@@ -21,7 +21,7 @@ class Task:
         self.day = day
         self.hour = hour
         self.minute = minute
-        # self.priority = priority
+        self.priority = priority
         self.name = name
         self.cat = cat
         self.sub = sub
@@ -198,6 +198,7 @@ class Task:
         with open('alarms.csv', 'w', newline='') as csvfile:
             fieldnames = ['Name',
                           'Description', 'Link', 'Location',
+                          'Category', 'SubTask', 'Priority',
                           'Year', 'Month', 'Day',
                           'Hour', 'Minute']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -205,7 +206,7 @@ class Task:
 
             writer.writerow({'Name': self.name, 'Description': self.description,
                              'Link': self.link, 'Location': self.loc,
-                             'Category': self.cat, 'SubTask': self.sub,
+                             'Category': self.cat, 'SubTask': self.sub, 'Priority': self.priority,
                              'Year': self.year, 'Month': self.month, 'Day': self.day,
                              'Hour': self.hour, 'Minute': self.minute})
             showinfo("notification", "reminder has been set")

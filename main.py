@@ -45,13 +45,13 @@ def new():
         file = file_name.get()
         cat = category.get()
         sub = subtask.get()
-        obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min)
+        obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min, p)
 
         if obj_task.check():
             obj_task.file_write()
             flag = True
             while flag:
-                t2.destroy()
+                #t2.destroy()
                 if obj_task.remind():
                     playsound("ring.mp3")
                     flag = False
