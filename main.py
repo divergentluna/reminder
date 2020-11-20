@@ -1,41 +1,20 @@
-from tkinter import ttk
-
-from playsound import *
-from datetime import datetime
-from tkinter import *
-
+import os
 from tkinter.ttk import *
 from task import *
-
 import logging
 
 logging.basicConfig(filename='reminder_log.log', level=logging.INFO)
+list_task = list()
 
 
 def new():
     logging.info(f'Programme closed at {datetime.now()}')
-    t.destroy()
-
-    def edit():
-        li = link.get()
-        loc = location.get()
-        des = descrip.get(1.0, END)
-        y = year.get()
-        m = month.get()
-        d = day.get()
-        h = hour.get()
-        min = minute.get()
-        p = priority.get()
-        file = file_name.get()
-        cat = category.get()
-        sub = subtask.get()
-        obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min)
-        obj_task.edit()
+    screen_1.destroy()
 
     def main():
         li = link.get()
         loc = location.get()
-        des = descrip.get(1.0, END)
+        des = descrip.get()
         y = year.get()
         m = month.get()
         d = day.get()
@@ -48,14 +27,12 @@ def new():
         obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min, p)
 
         if obj_task.check():
-            obj_task.file_write()
-            flag = True
-            while flag:
-                #t2.destroy()
-                if obj_task.remind():
-                    playsound("ring.mp3")
-                    flag = False
-                    print(obj_task)
+            if file not in list_task:
+                obj_task.file_write()
+                list_task.append(file)
+            else:
+                showinfo("Error", "name is available")
+                logging.error('Name already exists')
 
     t2 = Tk()
     t2.geometry("600x350")
@@ -65,8 +42,8 @@ def new():
     file_name.grid(row=0, column=1, pady=10)
     Label(t2, text="Description :").grid(row=1, column=0, pady=10)
 
-    descrip = Text(t2, width=50, height=2, font=("Arial", 10), wrap=WORD)
-    descrip.grid(row=1, column=1, columnspan=3, sticky=W)
+    descrip = Entry(t2)
+    descrip.grid(row=1, column=1, sticky=W)
 
     Label(t2, text="Link :").grid(row=2, column=0, pady=10)
     link = Entry(t2)
@@ -106,7 +83,7 @@ def new():
     Label(t2, text="Category").grid(row=7, column=0)
     category = ttk.Combobox(t2, values=['maktab', 'uni', 'home'])
     category.grid(row=7, column=1)
-    Label(text="Subtask").grid(row=7, column=2, sticky=E)
+    Label(t2, text="Subtask").grid(row=7, column=2, sticky=E)
     subtask = Entry(t2)
     subtask.grid(row=7, column=3)
     Button(t2, text="set", command=main, width=15, bg="grey").grid(row=8, column=1, pady=20)
@@ -114,71 +91,89 @@ def new():
 
 
 def exit_m():
-    t.destroy()
+    logging.info(f'Main menu closed at {datetime.now()}')
+    screen_1.destroy()
 
 
 def edit():
-    import tkinter as tk
-    from tkinter.filedialog import askopenfilename, asksaveasfilename
+    try:
+        file = name_file.get()
+        f = open(file + '.txt')
+        list = f.readlines()
+        sub = str(list[0]).rstrip('\n')
+        cat = str(list[1]).rstrip('\n')
+        des = str(list[2]).rstrip('\n')
+        li = str(list[3]).rstrip('\n')
+        loc = str(list[4]).rstrip('\n')
+        y = str(list[5]).rstrip('\n')
+        m = str(list[6]).rstrip('\n')
+        d = str(list[7]).rstrip('\n')
+        h = str(list[8]).rstrip('\n')
+        min = str(list[9]).rstrip('\n')
+        p = str(list[10]).rstrip('\n')
+        f.close()
+        obj_edit = Task(file, sub, cat, des, li, loc, y, m, d, h, min, p)
+        obj_edit.edit()
 
-    def open_file():
-        """Open a file for editing."""
-        filepath = askopenfilename(
-            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
-        )
-        if not filepath:
-            return
-        txt_edit.delete(1.0, tk.END)
-        with open(filepath, "r") as input_file:
-            text = input_file.read()
-            txt_edit.insert(tk.END, text)
-        window.title(f"Simple Text Editor - {filepath}")
-
-    def save_file():
-        """Save the current file as a new file."""
-        filepath = asksaveasfilename(
-            defaultextension="txt",
-            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
-        )
-        if not filepath:
-            return
-        with open(filepath, "w") as output_file:
-            text = txt_edit.get(1.0, tk.END)
-            output_file.write(text)
-        window.title(f"Simple Text Editor - {filepath}")
-
-    window = tk.Tk()
-    window.title("Simple Text Editor")
-    window.rowconfigure(0, minsize=800, weight=1)
-    window.columnconfigure(1, minsize=800, weight=1)
-
-    txt_edit = tk.Text(window)
-    fr_buttons = tk.Frame(window, relief=tk.RAISED, bd=2)
-    btn_open = tk.Button(fr_buttons, text="Open", command=open_file)
-    btn_save = tk.Button(fr_buttons, text="Save As...", command=save_file)
-
-    btn_open.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
-    btn_save.grid(row=1, column=0, sticky="ew", padx=5)
-
-    fr_buttons.grid(row=0, column=0, sticky="ns")
-    txt_edit.grid(row=0, column=1, sticky="nsew")
-
-    window.mainloop()
+    except FileNotFoundError:
+        showinfo("Error", "please,enter correct file!!")
+        logging.error('Not a correct file for read.')
 
 
 def remove():
-    # name_file.get open and delete
-    showinfo("notifacation", "your task delete")
-    pass
+    try:
+        file_name = name_file.get()
+        os.remove(file_name + '.txt')
+        showinfo("Info", "your task delete")
+        logging.warning(f'One task has been removed.')
+    except Exception:
+        showinfo("Error", "please,enter correct file!!")
+        logging.error('Not a correct file for read.')
 
 
-t = Tk()
-t.title("Menu")
+screen_1 = Tk()
+screen_1.title("Menu")
 Label(text="name of task").grid(row=0, column=0)
-name_file = Entry(t)
+name_file = Entry(screen_1)
 name_file.grid(row=0, column=1)
-edit_button = Button(t, text="edit", command=edit, width=15, bg="grey").grid(row=2, column=2)
-remove_button = Button(t, text="remove", width=15, command=remove, bg="grey").grid(row=2, column=3)
-new_button = Button(t, text="new", command=new, width=15, bg="grey").grid(row=3, column=2, pady=10)
-exit_button = Button(t, text="exit", command=exit_m, width=15, bg="grey").grid(row=3, column=3, padx=10)
-t.mainloop()
+edit_button = Button(screen_1, text="edit", command=edit, width=15, bg="grey").grid(row=2, column=2)
+remove_button = Button(screen_1, text="remove", width=15, command=remove, bg="grey").grid(row=2, column=3)
+new_button = Button(screen_1, text="new", command=new, width=15, bg="grey").grid(row=3, column=2, pady=10)
+exit_button = Button(screen_1, text="exit", command=exit_m, width=15, bg="grey").grid(row=3, column=3, padx=10)
+screen_1.mainloop()
+
+for name in list_task:
+    f = open(name + '.txt')
+    list = f.readlines()
+    sub = str(list[0]).rstrip('\n')
+    cat = str(list[1]).rstrip('\n')
+    des = str(list[2]).rstrip('\n')
+    li = str(list[3]).rstrip('\n')
+    loc = str(list[4]).rstrip('\n')
+    y = str(list[5]).rstrip('\n')
+    m = str(list[6]).rstrip('\n')
+    d = str(list[7]).rstrip('\n')
+    h = str(list[8]).rstrip('\n')
+    min = str(list[9]).rstrip('\n')
+    p = str(list[10]).rstrip('\n')
+    f.close()
+    obj_task_2 = Task(name, sub, cat, des, li, loc, int(y), int(m), int(d), int(h), int(min), p)
+
+    flag = True
+    if p == 'normal':
+        while flag == True:
+            if obj_task_2.remind():
+                playsound("ring.mp3")
+                logging.info('Alarm ringed!')
+                print(obj_task_2)
+                flag = False
+    else:
+        if obj_task_2.remind():
+            playsound("ring.mp3")
+            logging.info('Alarm ringed!')
+            print(obj_task_2)
+            time.sleep(6)
+            playsound("ring.mp3")
+            logging.info('Alarm ringed!')
+            print(obj_task_2)
+            flag = False
