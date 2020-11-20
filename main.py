@@ -3,6 +3,7 @@ from tkinter.ttk import *
 from task import *
 import logging
 
+# for creating a log file
 logging.basicConfig(filename='reminder_log.log', level=logging.INFO)
 list_task = list()
 
@@ -26,6 +27,7 @@ def new():
         sub = subtask.get()
         obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min, p)
 
+        # check if the object and values of task is in file or not
         if obj_task.check():
             if file not in list_task:
                 obj_task.file_write()
@@ -34,6 +36,7 @@ def new():
                 showinfo("Error", "name is available")
                 logging.error('Name already exists')
 
+    # new reminder set page display
     t2 = Tk()
     t2.geometry("600x350")
     t2.title("REMINDER")
@@ -90,11 +93,14 @@ def new():
     t2.mainloop()
 
 
+# close the menu screen
 def exit_m():
     logging.info(f'Main menu closed at {datetime.now()}')
     screen_1.destroy()
 
 
+# read each line of file and write it into a list
+# to use it as details of reminder
 def edit():
     try:
         file = name_file.get()
@@ -115,11 +121,13 @@ def edit():
         obj_edit = Task(file, sub, cat, des, li, loc, y, m, d, h, min, p)
         obj_edit.edit()
 
+    # exception
     except FileNotFoundError:
         showinfo("Error", "please,enter correct file!!")
         logging.error('Not a correct file for read.')
 
 
+# remove the file of reminder
 def remove():
     try:
         file_name = name_file.get()
@@ -131,6 +139,7 @@ def remove():
         logging.error('Not a correct file for read.')
 
 
+# menu screen
 screen_1 = Tk()
 screen_1.title("Menu")
 Label(text="name of task").grid(row=0, column=0)
@@ -142,6 +151,8 @@ new_button = Button(screen_1, text="new", command=new, width=15, bg="grey").grid
 exit_button = Button(screen_1, text="exit", command=exit_m, width=15, bg="grey").grid(row=3, column=3, padx=10)
 screen_1.mainloop()
 
+# read each line of file and write it into a list
+# to use it as details of reminder
 for name in list_task:
     f = open(name + '.txt')
     list = f.readlines()
@@ -159,15 +170,16 @@ for name in list_task:
     f.close()
     obj_task_2 = Task(name, sub, cat, des, li, loc, int(y), int(m), int(d), int(h), int(min), p)
 
+    # play sound for normal priority once
     flag = True
     if p == 'normal':
-        while flag == True:
+        while flag:
             if obj_task_2.remind():
                 playsound("ring.mp3")
                 logging.info('Alarm ringed!')
                 print(obj_task_2)
                 flag = False
-    else:
+    else:  # play sound for important priority once again after some seconds
         if obj_task_2.remind():
             playsound("ring.mp3")
             logging.info('Alarm ringed!')

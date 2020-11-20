@@ -11,6 +11,7 @@ import logging
 
 
 class Task:
+    # initialize the task object
     def __init__(self, name, sub, cat, description, link, loc, year, month, day, hour, minute, priority):
         self.description = description
         self.link = link
@@ -25,6 +26,7 @@ class Task:
         self.cat = cat
         self.sub = sub
 
+    # override str method for showing alarm details when it snoozed
     def __str__(self):
         def snooze():
             screen.destroy()
@@ -33,10 +35,12 @@ class Task:
             logging.info(f'Reminder snoozed for 1 minute from {datetime.now()}')
             return self
 
+        # close the screen that shows details
         def exit_s():
             logging.info(f'Closed at {datetime.now()}')
             screen.destroy()
 
+        # display page for reminder
         screen = Tk()
         screen.geometry("300x300")
         screen.title(self.name)
@@ -53,6 +57,7 @@ class Task:
         screen.mainloop()
         return "remind"
 
+    # to check different conditions for date/time input
     def check(self):
         if self.priority == "":
             showinfo("notification", "Enter priority!")
@@ -117,7 +122,9 @@ class Task:
             return True
         return False
 
+    # edit page
     def edit(self):
+        # save edited in a file
         def save():
             f = open(self.name + '.txt', 'w')
             f.write('{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}'.format(subtask.get(), category.get(), descrip.get(),
@@ -132,6 +139,7 @@ class Task:
             logging.info('Task has been edited.')
             # t.destroy()
 
+        # display edit page with default values which were previous values (data before edit)
         t = Tk()
         t.geometry("600x350")
         t.title(self.name)
@@ -192,6 +200,7 @@ class Task:
         Button(t, text="save", command=save).grid(row=8, column=3, pady=20, sticky=W)
         t.mainloop()
 
+    # save a reminder as a file
     def file_write(self):
         file_cat = open(self.cat + '.txt', 'a')
         file_cat.write(self.name)
