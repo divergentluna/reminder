@@ -23,8 +23,8 @@ def new():
         p = priority.get()
         file = file_name.get()
         cat = category.get()
-        sub=subtask.get()
-        obj_task = Task(file,sub, cat, des, li, loc, y, m, d, h, min)
+        sub = subtask.get()
+        obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min)
         obj_task.edit()
 
     def main():
@@ -39,12 +39,13 @@ def new():
         p = priority.get()
         file = file_name.get()
         cat = category.get()
-        obj_task = Task(file, cat, des, li, loc, y, m, d, h, min)
+        sub = subtask.get()
+        obj_task = Task(file, sub, cat, des, li, loc, y, m, d, h, min)
 
         if obj_task.check():
             obj_task.file_write()
             flag = True
-            while flag == True:
+            while flag:
                 t2.destroy()
                 if obj_task.remind():
                     playsound("ring.mp3")
@@ -100,9 +101,9 @@ def new():
     Label(t2, text="Category").grid(row=7, column=0)
     category = ttk.Combobox(t2, values=['maktab', 'uni', 'home'])
     category.grid(row=7, column=1)
-    Label(text="Subtask").grid(row=7,column=2,sticky=E)
-    subtask=Entry(t2)
-    subtask.grid(row=7,column=3)
+    Label(text="Subtask").grid(row=7, column=2, sticky=E)
+    subtask = Entry(t2)
+    subtask.grid(row=7, column=3)
     Button(t2, text="set", command=main, width=15, bg="grey").grid(row=8, column=1, pady=20)
     t2.mainloop()
 

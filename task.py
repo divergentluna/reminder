@@ -3,6 +3,8 @@ from tkinter import Tk, ttk
 from tkinter.messagebox import showinfo
 from tkinter import *
 from tkinter.ttk import Combobox
+import re
+import csv
 
 
 class Task:
@@ -54,12 +56,18 @@ class Task:
         elif self.month == 2:
             if self.day > 29:
                 showinfo("notification", "day is out of range for the month you choose")
+                return False
+            else:
+                return True
         elif self.month == 4 \
                 or self.month == 6 \
                 or self.month == 9 \
                 or self.month == 11:
             if self.day > 30:
                 showinfo("notification", "day is out of range for the month you choose")
+                return False
+            else:
+                return True
         # CHECK WHETHER INPUT DATE IS OVER
         elif self.year == datetime.now().year:
             if self.month < datetime.now().month:
@@ -82,6 +90,13 @@ class Task:
         # CHECK COMING YEARS
         else:
             return True
+
+        # CHECK IF URL IS IN CORRECT FORM
+        if re.search("(?P<url>https?://[^\s]+)", self.link).group("url"):
+            return True
+        else:
+            showinfo("notification", "URL is not correct!")
+            return False
 
     # COMPARE INPUT DATE AND TIME WITH SYSTEM DATE AND TIME FOR REMINDING
     def remind(self):
@@ -151,13 +166,27 @@ class Task:
         t.mainloop()
 
     def file_write(self):
-        file_cat = open(self.cat + '.txt', 'a')
-        file_cat.write(self.name)
-        file_cat.close()
-        f = open(self.name + '.txt', 'w')
-        f.write('{}\n{}\n{}\n{}\\{}\\{}\n{}:{}'.format(self.description, self.link, self.loc, str(self.year),
-                                                       str(self.month), str(self.day), str(self.hour),
-                                                       str(self.minute)))
-        f.close()
-        showinfo("notification", "reminder has been set")
+        # TXT FILE SAVE FORM
+        # file_cat = open(self.cat + '.txt', 'a')
+        # file_cat.write(self.name)
+        # file_cat.close()
+        # f = open(self.name + '.txt', 'w')
+        # f.write('{}\n{}\n{}\n{}\\{}\\{}\n{}:{}'.format(self.description, self.link, self.loc, str(self.year),
+        #                                                str(self.month), str(self.day), str(self.hour),
+        #                                                str(self.minute)))
+        # f.close()
+        # showinfo("notification", "reminder has been set")
 
+        # CSV FILE SAVE FORM
+        with open('alarms.csv', 'w', newline='') as csvfile:
+            fieldnames = ['Name',
+                          'Description', 'Link', 'Location',
+                          'Year', 'Month', 'Day',
+                          'Hour', 'Minute']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerow({'Name': self.name, 'Description': self.description,
+                             'Link': self.link, 'Location': self.loc,
+                             'Year': self.year, 'Month': self.month, 'Day': self.day,
+                             'Hour': self.hour, 'Minute': self.minute})
+            showinfo("notification", "reminder has been set")
